@@ -37,26 +37,24 @@ public class Readfromjar {
 		{
 			Process handletoread = new SparkLauncher()
 			         .addAppArgs(uname, "true", pwd)
-			         .setAppResource("/home/local/ZOHOCORP/arvind-pt4542/git/repository/Sparkread/Spark_reader/target/Line_count-0.0.1-SNAPSHOT.jar")
-			         .setMainClass("Read")
+			         .setAppResource("/home/local/ZOHOCORP/arvind-pt4542/eclipse-workspace/Testhdfswrite/target/Line_count-0.0.1-SNAPSHOT.jar")
+			         .setMainClass("Hdfsread")
 			         .setMaster("local")
 			         .setConf(SparkLauncher.DRIVER_MEMORY, "2g")
 			         .setSparkHome("/home/local/ZOHOCORP/arvind-pt4542/Documents/spark-3.2.1-bin-hadoop3.2")
 			         .launch();
 			handletoread.waitFor();
 			String result = new BufferedReader(new InputStreamReader(handletoread.getInputStream())).lines().collect(Collectors.joining("\n"));
-			System.out.println(result.split("\n")[0]);
-			//System.out.println("sdfdsf");
-			if(result.split("\n")[0].equals("Yes"))
+			//System.out.println(result.split("\n")[0]);
+			String sarr[] = result.split("\n");
+			for(int i=0;i<sarr.length;i++)
 			{
-				return "done";
+				if(sarr[i].equals("Yes"))
+				{
+					return "done";
+				}
 			}
-//			else if(result.split("\n")[0].equals("Pwdincorrect"))
-//			{
-//				return "pwd";
-//			}
-			else{
-				return "no";
-			}
+			return "no";
+			
 		}
 }
