@@ -1,6 +1,7 @@
 import java.io.IOException;		
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,16 +15,20 @@ public class Login extends HttpServlet
 	private static final long serialVersionUID = 1L;
        
 
-	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException 
+	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException 
 	{
 		String username = req.getParameter("username");
-		System.out.println("In Login.java : "+username);
+		//System.out.println("In Login.java : "+username);
 		String password = req.getParameter("password");
 		try {
 			String check = Readfromjar.readfrom(username, password);
 			if(check.equals("done"))
 			{
-				req.getSession().setAttribute("username", username);
+				//req.getSession().setAttribute("username", username);
+				Cookie usercookie = new Cookie("username", username);
+				//System.out.println(username);
+				//usercookie.setMaxAge(30*60);
+				res.addCookie(usercookie);
 				showMessageDialog(null, "You have been successfully logged in!");
 				res.sendRedirect("Welcome.jsp");
 				
