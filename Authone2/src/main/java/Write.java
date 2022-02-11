@@ -36,8 +36,8 @@ public class Write
 //		SparkSession spark = SparkSession.builder().appName("csv-demo").getOrCreate();
 		Process handletoread = new SparkLauncher()
 		         .addAppArgs(uname, "false", pwd)
-		         .setAppResource("/home/local/ZOHOCORP/arvind-pt4542/git/repository/Sparkread/Spark_reader/target/Line_count-0.0.1-SNAPSHOT.jar")
-		         .setMainClass("Read")
+		         .setAppResource("/home/local/ZOHOCORP/arvind-pt4542/eclipse-workspace/Testhdfswrite/target/Line_count-0.0.1-SNAPSHOT.jar")
+		         .setMainClass("Hdfsread")
 		         .setMaster("local")
 		         .setConf(SparkLauncher.DRIVER_MEMORY, "2g")
 		         .setSparkHome("/home/local/ZOHOCORP/arvind-pt4542/Documents/spark-3.2.1-bin-hadoop3.2")
@@ -45,26 +45,49 @@ public class Write
 		handletoread.waitFor();
 		
 		String result = new BufferedReader(new InputStreamReader(handletoread.getInputStream())).lines().collect(Collectors.joining("\n"));
-		System.out.println(result);
-		if(result.split("\n")[0].equals("No"))
+		String sarr[] = result.split("\n");
+		boolean ispresent = false;
+		for(int i=0;i<sarr.length;i++)
 		{
-		
-		Process handle = new SparkLauncher()
-		         .addAppArgs(uname, pwd)
-		         .setAppResource("/home/local/ZOHOCORP/arvind-pt4542/eclipse-workspace/Line_count/target/Line_count-0.0.1-SNAPSHOT.jar")
-		         .setMainClass("Writing1")
-		         .setMaster("local")
-		         .setConf(SparkLauncher.DRIVER_MEMORY, "2g")
-		         .setSparkHome("/home/local/ZOHOCORP/arvind-pt4542/Documents/spark-3.2.1-bin-hadoop3.2")
-		         .launch();
-		handle.waitFor();
-		
-		return true;
+			//System.out.println(sarr[i]);
+			if(sarr[i].equals("Yes"))
+			{
+				ispresent = true;
+			}
 		}
-		else
+		if(!ispresent)
 		{
-			return false;
+			Process handle = new SparkLauncher()
+			         .addAppArgs(uname, pwd)
+			         .setAppResource("/home/local/ZOHOCORP/arvind-pt4542/eclipse-workspace/Line_count/target/Line_count-0.0.1-SNAPSHOT.jar")
+			         .setMainClass("Writing1")
+			         .setMaster("local")
+			         .setConf(SparkLauncher.DRIVER_MEMORY, "2g")
+			         .setSparkHome("/home/local/ZOHOCORP/arvind-pt4542/Documents/spark-3.2.1-bin-hadoop3.2")
+			         .launch();
+			handle.waitFor();
+			return true;
 		}
+		return false;
+//		if(result.split("\n")[0].equals("No"))
+//		{
+//		
+//		Process handle = new SparkLauncher()
+//		         .addAppArgs(uname, pwd)
+//		         .setAppResource("/home/local/ZOHOCORP/arvind-pt4542/eclipse-workspace/Line_count/target/Line_count-0.0.1-SNAPSHOT.jar")
+//		         .setMainClass("Writing1")
+//		         .setMaster("local")
+//		         .setConf(SparkLauncher.DRIVER_MEMORY, "2g")
+//		         .setSparkHome("/home/local/ZOHOCORP/arvind-pt4542/Documents/spark-3.2.1-bin-hadoop3.2")
+//		         .launch();
+//		handle.waitFor();
+//		
+//		return true;
+//		}
+//		else
+//		{
+//			return false;
+//		}
 		//BufferedReader fromserver = new BufferedReader (new InputStreamReader (handle.getOutputStream()));
 		
 		
