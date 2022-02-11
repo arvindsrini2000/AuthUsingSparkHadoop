@@ -17,6 +17,7 @@ import org.apache.spark.sql.types.StructType;
 import java.io.IOException;		
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +34,7 @@ public class Signup extends HttpServlet
 	static String username = "";
 	static String password = "";
 	
-	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException 
+	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException 
 	{
 		//Write writer = new Write();
 		username = req.getParameter("username");
@@ -43,7 +44,10 @@ public class Signup extends HttpServlet
 			if(haswritten)
 			{
 				showMessageDialog(null, "Successfully Signed Up!");
-				req.getSession().setAttribute("username", username);
+				Cookie c1 = new Cookie("username",username);
+				c1.setMaxAge(100000);
+				res.addCookie(c1);
+				//req.getSession().setAttribute("username", username);
 				res.sendRedirect("Welcome.jsp");
 			}
 			else
